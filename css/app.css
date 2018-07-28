@@ -73,6 +73,7 @@ h1 {
 
 .deck .card.show {
     font-size: 33px;
+    pointer-events: none;
 }
 
 .deck .card.match {
@@ -86,12 +87,16 @@ h1 {
  */
 
 .score-panel {
-    text-align: left;
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
     width: 345px;
     margin-bottom: 10px;
 }
 
 .score-panel .stars {
+    font-size: 30px;
+    color: yellow;
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -106,4 +111,9 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+.counter {
+    display: flex;
+    align-items: center;
 }
