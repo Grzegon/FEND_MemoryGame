@@ -42,6 +42,7 @@ deck.addEventListener('click', event => {
 restart.addEventListener('click', event => {
     event.preventDefault();
     deck.innerHTML = '';
+    stars.innerHTML = '';
     steps = 0;
     matched = [];
     opened = [];
@@ -56,10 +57,16 @@ const startGame = () => {
     const shuffled = shuffle(cardsList);
     counter.innerHTML = steps;
 
+    for(let i=0; i<3;i++){
+        const star = document.createElement('li');
+        star.innerHTML = "<i class='fas fa-star'></i>";
+        stars.appendChild(star);
+    }
+
     for (let i = 0; i < shuffled.length; i++) {
         const card = document.createElement('li');
         card.classList.add('card');
-        card.innerHTML = "<i class='" + shuffled[i] + "'</i>";
+        card.innerHTML = "<i class='" + shuffled[i] + "'></i>";
         deck.appendChild(card);
     }
 }
