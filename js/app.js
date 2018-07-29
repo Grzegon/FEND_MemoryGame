@@ -21,46 +21,58 @@ const cardsList = [
 ];
 // Get elements from document
 const deck = document.querySelector('.deck');
-const counter = document.querySelector('.moves');
+const counter = document.querySelectorAll('.moves');
 const restart = document.querySelector('.restart');
-const stars = document.querySelector('.stars');
+const stars = document.querySelectorAll('.stars');
+const modal = document.querySelector('.modal');
+const timer = document.querySelectorAll('.timer');
 let opened = [];
 let matched = [];
 let steps = 0;
-
-/**
- * Listen for click on card to open it
- */
-deck.addEventListener('click', event => {
-    event.preventDefault();
-    openCard(event.target);
-})
+let seconds = 0;
+let minutes = 0;
+let t;
 
 /**
  * Listen for click on restart button to start game again
  */
 restart.addEventListener('click', event => {
     event.preventDefault();
+    restartGame();
+})
+
+const restartGame = () => {
+    clearInterval(t);
+    timer[0].textContent = '00:00';
     deck.innerHTML = '';
-    stars.innerHTML = '';
+    stars.forEach(element => {
+        element.innerHTML = '';
+    })
     steps = 0;
     matched = [];
     opened = [];
+    seconds = 0;
+    minutes = 0;
 
     startGame();
-})
+}
 
 /**
  * Renders deck for new game
  */
 const startGame = () => {
     const shuffled = shuffle(cardsList);
-    counter.innerHTML = steps;
+    counter.forEach(element => {
+        element.innerHTML = steps;
+    })
 
-    for(let i=0; i<3;i++){
-        const star = document.createElement('li');
-        star.innerHTML = "<i class='fas fa-star'></i>";
-        stars.appendChild(star);
+    for (let i = 0; i < 3; i++) {
+        stars.forEach(element => {
+            const star = document.createElement('li');
+
+            star.innerHTML = "<i class='fas fa-star'></i>";
+            element.appendChild(star);
+        })
     }
 
     for (let i = 0; i < shuffled.length; i++) {
@@ -68,6 +80,13 @@ const startGame = () => {
         card.classList.add('card');
         card.innerHTML = "<i class='" + shuffled[i] + "'></i>";
         deck.appendChild(card);
+        /**
+        * Listen for click on card to open it
+        */
+        card.addEventListener('click', event => {
+            event.preventDefault();
+            openCard(card);
+        })
     }
 }
 
@@ -78,11 +97,12 @@ const startGame = () => {
  */
 const openCard = (card) => {
     if (opened.length === 1) { // If one card is open
-        card.classList.add('open', 'show');
+        card.classList.add('open', 'show', 'disable');
         opened.push(card);
         checkMatch(card, opened[0]);
     } else if (opened.length < 2) { // Prevent from fast opening three cards
-        card.classList.add('open', 'show');
+        card.classList.add('open', 'show', 'disable');
+        startTimer();
         opened.push(card);
     }
 }
@@ -107,8 +127,8 @@ const checkMatch = (currentCard, previousCard) => {
 
     } else {
         setTimeout(() => {
-            currentCard.classList.remove('open', 'show');
-            previousCard.classList.remove('open', 'show');
+            currentCard.classList.remove('open', 'show', 'disable');
+            previousCard.classList.remove('open', 'show', 'disable');
 
             opened = [];
         }, 400)
@@ -139,8 +159,9 @@ const shuffle = array => {
  */
 const gameOver = () => {
     if (matched.length === cardsList.length) {
+        clearInterval(t);
         setTimeout(() => {
-            alert('YOU WON!');
+            renderModal();
         }, 400)
     }
 }
@@ -150,21 +171,62 @@ const gameOver = () => {
  */
 const countSteps = () => {
     steps++;
-    counter.innerHTML = steps;
+    counter.forEach(element => {
+        element.innerHTML = steps;
+    })
     rateGame(steps);
 }
 
+const renderModal = () => {
+    const restart = document.querySelector('.modal-restartGame');
+
+    modal.style.display = "grid";
+    timer[1].textContent =
+        (minutes < 10 ? '0' + minutes.toString() : minutes) +
+        ':' +
+        (seconds < 10 ? '0' + seconds.toString() : seconds)
+
+    restart.addEventListener('click', event => {
+        event.preventDefault();
+        modal.style.display = "none";
+        restartGame();
+    })
+}
+
 const rateGame = (steps) => {
-    console.log('rate');
     if (steps > 10 && steps < 15) {
-        console.log('rate less');
-        stars.children[2].children[0].classList.replace('fas', 'far');
-        console.log(stars.children[2].children[0]);
+        stars.forEach(element => {
+            element.children[2].children[0].classList.replace('fas', 'far');
+        })
     } else if (steps > 15 && steps < 20) {
-        stars.children[1].children[0].classList.replace('fas', 'far');
+        stars.forEach(element => {
+            element.children[1].children[0].classList.replace('fas', 'far');
+        })
     } else if (steps > 20) {
-        stars.children[0].children[0].classList.replace('fas', 'far');
+        stars.forEach(element => {
+            element.children[0].children[0].classList.replace('fas', 'far');
+        })
     }
+}
+
+const startTimer = () => {
+    clearInterval(t)
+    t = setInterval(function () {
+        seconds++
+
+        if (seconds === 60) {
+            seconds = 0
+            minutes++
+            if (minutes === 60) {
+                minutes = 0
+                seconds = 0
+            }
+        }
+        timer[0].textContent =
+            (minutes < 10 ? '0' + minutes.toString() : minutes) +
+            ':' +
+            (seconds < 10 ? '0' + seconds.toString() : seconds)
+    }, 1000)
 }
 
 startGame();

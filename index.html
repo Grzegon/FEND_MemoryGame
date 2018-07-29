@@ -21,12 +21,32 @@
                  <h3>Moves:</h3>
                  <h3 class="moves">0</h3>
             </div>
+            <div>
+                <h4 class="timer">00:00</h4>
+            </div>
             <div class="restart">
         		<i class="fas fa-redo-alt"></i>
         	</div>
         </section>
 
         <ul class="deck"></ul>
+
+        <div class="modal">
+            <div class="modal-content">
+                <h2>Congratulations!</h2>
+                <div class="modal-steps">
+                    <h4>You did it in:</h4><h4 class="moves"></h4><h4> moves!</h4>
+                </div>
+                <div class="modal-steps">
+                   <h4>Your time:</h4><h4 class="timer">00:00</h4> 
+                </div>
+                <ul class="stars"></ul>
+                <div class="modal-steps">
+                    <h4>Play again!</h4><i class="fas fa-redo-alt modal-restartGame"></i>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="js/app.js"></script>
