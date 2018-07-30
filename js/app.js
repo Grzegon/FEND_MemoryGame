@@ -194,17 +194,13 @@ const renderModal = () => {
 }
 
 const rateGame = (steps) => {
-    if (steps > 10 && steps < 15) {
+    if (steps > 15 && steps < 20) {
         stars.forEach(element => {
             element.children[2].children[0].classList.replace('fas', 'far');
         })
-    } else if (steps > 15 && steps < 20) {
-        stars.forEach(element => {
-            element.children[1].children[0].classList.replace('fas', 'far');
-        })
     } else if (steps > 20) {
         stars.forEach(element => {
-            element.children[0].children[0].classList.replace('fas', 'far');
+            element.children[1].children[0].classList.replace('fas', 'far');
         })
     }
 }
